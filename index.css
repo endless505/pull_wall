@@ -1,0 +1,28 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+#container{
+	width: 1200px;
+	margin:30px auto;
+	position: relative;
+}
+.view{
+	/* width: 285px; */
+	position: absolute;
+	border: 1px solid red;
+}
+.view img{
+	width: 100%;
+	vertical-align: middle;
+}
+.view p{
+	font-size: 20px;
+}
+@media (max-width:1200px) {
+	#container{
+		width: 100%;
+		padding: 0 15px;
+	}
+}

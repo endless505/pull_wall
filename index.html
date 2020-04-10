@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>瀑布流</title>
+		<link rel="stylesheet" type="text/css" href="index.css" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+	</head>
+	<body>
+		<div id="container">
+			<div id="box" style="position: relative;">
+				<div class="view" v-for="(item,index) in arr">
+					<img :src="item.src" alt="">
+					<p>原生javascript制作瀑布流</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			new Vue({
+				el: "#box",
+				data: {
+					arr: [{
+							src: "img/1.jpg"
+						},
+						{
+							src: "img/2.jpg"
+						}, {
+							src: "img/3.jpg"
+						}, {
+							src: "img/4.jpg"
+						}, {
+							src: "img/5.jpg"
+						}, {
+							src: "img/1.jpg"
+						},
+						{
+							src: "img/2.jpg"
+						}, {
+							src: "img/3.jpg"
+						}, {
+							src: "img/4.jpg"
+						}, {
+							src: "img/5.jpg"
+						}, {
+							src: "img/2.jpg"
+						}, {
+							src: "img/2.jpg"
+						}, {
+							src: "img/2.jpg"
+						}, {
+							src: "img/2.jpg"
+						}, {
+							src: "img/2.jpg"
+						}, {
+							src: "img/2.jpg"
+						},
+					]
+				},
+				methods: {
+
+				}
+			})
+			window.onload = function() {
+				wallent(20, 20, 4) //参数：左右间隙、上线间隙、列数
+			}
+			window.addEventListener("resize",function(){
+				if(document.documentElement.clientWidth < 768){
+					wallent(20, 20, 2) //参数：左右间隙、上线间隙、列数
+				} else if(document.documentElement.clientWidth < 1200 && document.documentElement.clientWidth > 768){
+					wallent(20, 20, 3) //参数：左右间隙、上线间隙、列数
+				} else{
+					wallent(20, 20, 4) //参数：左右间隙、上线间隙、列数
+				}
+				
+			})
+			function wallent(gap, topgap, col) {
+				var box = document.getElementById("box");
+				var child = box.children;
+				// var gap = 20;
+				var gap = gap;
+				var topgap = topgap;
+				var col = col;
+				// var itemwidth = 285;
+				var itemwidth = (box.offsetWidth - gap * (col - 1)) / col;
+				console.log(itemwidth);
+				var heightArr = [];
+				var minheightIndex = 0;
+				for (item of child) {
+					item.style.width = itemwidth + "px";
+				}
+				// var col = Math.ceil(box.offsetWidth / (itemwidth + gap));
+				for (let i = 0; i < child.length; i++) {
+					if (i < col) {
+						child[i].style.left = i * (gap + itemwidth) + "px";
+						child[i].style.top = 0;
+						for (let j = 0; j < col; j++) {
+							heightArr[j] = child[j].offsetHeight;
+						}
+					} else {
+						var thisH = child[i].offsetHeight;
+						for (let m = 0; m < heightArr.length; m++) {
+							if (heightArr[minheightIndex] > heightArr[m]) {
+								minheightIndex = m
+							}
+						}
+						child[i].style.top = heightArr[minheightIndex] + topgap + "px";
+						child[i].style.left = minheightIndex * (gap + itemwidth) + "px";
+						heightArr[minheightIndex] += thisH + topgap;
+					}
+				}
+				box.style.height = heightArr.sort((a, b) => {
+					return b - a
+				})[0] + "px";
+			}
+		</script>
+	</body>
+</html>
